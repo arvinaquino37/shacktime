@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "108626651652",
+    "project_id": "intrepid-axe-345812",
+    "storage_bucket": "intrepid-axe-345812.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108626651652:android:aaf72d2e72dbb6dc9d6351",
+        "android_client_info": {
+          "package_name": "com.shacktime.hris"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108626651652-o4q0o2ijs7rb7jcesdbm2eaq6ptt01b8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjwOHf_SvP8spVXgt_uunASqGKaqlMXlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108626651652-o4q0o2ijs7rb7jcesdbm2eaq6ptt01b8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
