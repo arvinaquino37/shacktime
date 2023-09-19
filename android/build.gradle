@@ -1,5 +1,10 @@
 buildscript {
     ext.kotlin_version = '1.7.0'
+    ext{
+        compileSdkVersion   = 31
+        targetSdkVersion    = 31
+        appCompatVersion    = "1.4.2"
+    }
     repositories {
         google()
         mavenCentral()
@@ -19,6 +24,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven{
+            url "${project(':background_fetch').projectDir}/libs"
+        }
         configurations.all {
             resolutionStrategy {
                 force "com.google.android.gms:play-services-location:21.0.1"
