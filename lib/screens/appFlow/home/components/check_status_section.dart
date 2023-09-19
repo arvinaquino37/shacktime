@@ -316,7 +316,7 @@ class _ClockTimerState extends State<ClockTimer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // startTimer();
+    startTimer();
   }
 
   @override

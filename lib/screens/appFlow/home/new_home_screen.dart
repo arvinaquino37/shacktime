@@ -15,6 +15,7 @@ import 'package:hrm_app/utils/res.dart';
 import 'package:provider/provider.dart';
 
 import '../../../live_traking/location_provider.dart';
+import 'components/check_status_section2.dart';
 import 'components/greetings_section.dart';
 import 'components/upcoming_events.dart';
 
@@ -94,7 +95,7 @@ class NewHomeScreen extends StatelessWidget {
                       ),
 
                       ///Check In Check Out here:-------------------------
-                      CheckStatusSection(
+                      CheckStatusSection2(
                         provider: provider,
                       ),
 
