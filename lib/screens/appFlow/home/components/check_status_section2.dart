@@ -249,6 +249,17 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                       'Location: QC - Tandang Sora',
                                       style: TextStyle(color: Colors.white),
                                     ))),
+                            Container(
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.brown,
+                                    borderRadius:
+                                    BorderRadius.circular(16)),
+                                child: Center(
+                                    child: Text(
+                                      'Store Hours: 11AM-11PM',
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
                             // const SizedBox(height: 10),
                           ],
                         ),
