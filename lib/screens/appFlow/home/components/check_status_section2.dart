@@ -226,18 +226,24 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                           children: [
                             Row(
                               children: [
-                                buildTime(),
+                                // buildTime(),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 ElevatedButton(
-                                    onPressed: isRunning ? null : () => startTimer(),
+                                    onPressed: widget.provider?.checkStatus != "Check In" ? null : (){
+                                      Provider.of<HomeProvider>(context, listen: false).loadHomeData(context);
+                                      widget.provider?.getAttendanceMethod(context);
+                                    } ,
                                     child: Text('Time-in')),
                                 SizedBox(
                                   width: 5,
                                 ),
                                 ElevatedButton(
-                                    onPressed: isRunning ? () => stopTimer() : null,
+                                    onPressed: widget.provider?.checkStatus != "Check In" ? () {
+                                      Provider.of<HomeProvider>(context, listen: false).loadHomeData(context);
+                                      widget.provider?.getAttendanceMethod(context);
+                                    } : null,
                                     child: Text('Time-out'))
                               ],
                             ),
@@ -328,9 +334,9 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(onPressed: (){
-                            setState(() {
-                              tdata = currentTime;
-                            });
+                            // setState(() {
+                            //   tdata = currentTime;
+                            // });
                           }, child: Text('Check Rendered Time?'))),
                       SizedBox(width: 20,),
                       Text(tdata == null ? 'Loading...' : tdata)
