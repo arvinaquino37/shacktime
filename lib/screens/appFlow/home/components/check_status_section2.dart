@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrm_app/screens/appFlow/home/home_provider.dart';
 import 'package:hrm_app/utils/res.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -20,6 +21,8 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
   Duration duration = Duration();
   Timer? timer;
   bool isRunning = false;
+  String tdata = DateFormat("hh:mm:ss a").format(DateTime.now());
+  var currentTime;
 
   void startTimer() {
     if(!isRunning ){
@@ -305,13 +308,35 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                               ),
                                             ],
                                           ))),
-                                  Icon(Icons.arrow_forward_ios_outlined)
+                                  Icon(Icons.arrow_forward_ios_outlined),
+
                                 ],
                               ),
                             ],
                           )),
+
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                      child: Divider(
+                        color: Colors.grey[400],
+                      )),
+                  Row(
+                    children: [
+                      SizedBox(width: 20),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(onPressed: (){
+                            setState(() {
+                              tdata = currentTime;
+                            });
+                          }, child: Text('Check Rendered Time?'))),
+                      SizedBox(width: 20,),
+                      Text(tdata == null ? 'Loading...' : tdata)
                     ],
                   )
+
                 ],
               ),
             ),
