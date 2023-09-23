@@ -6,6 +6,7 @@ import 'package:hrm_app/screens/appFlow/home/home_provider.dart';
 import 'package:hrm_app/utils/res.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CheckStatusSection2 extends StatefulWidget {
@@ -22,7 +23,21 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
   Timer? timer;
   bool isRunning = false;
   String tdata = DateFormat("hh:mm:ss a").format(DateTime.now());
-  var currentTime;
+
+  DateTime? time1;
+  DateTime? time2;
+  int time1InMinutes = 0;
+  int time2InMinutes = 0;
+
+  String currentTimeIn = '';
+  String currentTimeOut = '';
+
+  DateTime? timeIn;
+  DateTime? timeOut;
+  int differenceInMinutes = 0;
+
+  String? saveTimeIn;
+  String? saveTimeIn2;
 
   void startTimer() {
     if(!isRunning ){
@@ -51,11 +66,111 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
     });
   }
 
+  void getTimeIn() {
+    setState(() {
+      timeIn = DateTime.now();
+    });
+    print('timeIn: ${timeIn}');
+  }
+
+  void getTimeOut() {
+    setState(() {
+      timeOut = DateTime.now();
+    });
+  }
+
+  void calculateTimeDifference2() {
+    if (saveTimeIn2 != null && timeOut != null) {
+      final difference = timeOut!.difference(DateTime.parse(saveTimeIn2!));
+      differenceInMinutes = difference.inMinutes;
+    } else {
+      setState(() {
+        differenceInMinutes = 0;
+      });
+    }
+  }
+
+  void calculateTimeDifference() {
+    if (time1 != null && time2 != null) {
+      final difference = time2!.difference(time1!);
+      time1InMinutes = difference.inMinutes;
+      time2InMinutes = 0; // Reset time2 in minutes
+    }
+  }
+
+  void getCurrentTimeIn() {
+    // final now = DateTime.now();
+    final now = DateFormat("hh:mm:ss a").format(DateTime.now());
+    setState(() {
+      currentTimeIn = now.toString();
+    });
+    print('getCurrentTimeIn: $currentTimeIn');
+  }
+
+  void getCurrentTimeOut() {
+    // final now = DateTime.now();
+    final now = DateFormat("hh:mm:ss a").format(DateTime.now());
+    setState(() {
+      currentTimeOut = now.toString();
+    });
+    print('getCurrentTimeOut $currentTimeOut');
+  }
+
+  String getTimeString(int value) {
+    final int hour = value ~/ 60;
+    final int minutes = value % 60;
+    return '${hour.toString().padLeft(2, "0")} : ${minutes.toString().padLeft(2, "0")}';
+  }
+
+  Future<void> setData(value) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('setData', value);
+  }
+
+  Future<void> getData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      saveTimeIn = pref.getString('setData');
+    });
+    print('saveTimeIn: $saveTimeIn');
+  }
+
+  Future<void> setData2(DateTime value) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('setData2', value.toIso8601String());
+  }
+
+  Future<DateTime> getData2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      saveTimeIn2 = prefs.getString('setData2');
+    });
+    print('saveTimeIn2: $saveTimeIn2');
+    if (saveTimeIn2 != null) {
+      return DateTime.parse(saveTimeIn2!);
+    } else {
+      // Handle the case where the DateTime has not been saved yet
+      return DateTime.now(); // You can choose a default value or handle it differently
+    }
+
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     timer?.cancel();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      getData();
+      getData2();
+      calculateTimeDifference2();
+    });
   }
 
   @override
@@ -66,7 +181,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
       visible: widget.provider?.isCheckIn ?? false,
       child: Column(
         children: [
-          Card(
+          /*Card(
             elevation: 2,
             margin: const EdgeInsets.symmetric(horizontal: 16),
             shape: RoundedRectangleBorder(
@@ -124,7 +239,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                     ],
                   ),
                 )),
-          ),
+          ),*/
           SizedBox(
             height: 10,
           ),
@@ -234,6 +349,15 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                     onPressed: widget.provider?.checkStatus != "Check In" ? null : (){
                                       Provider.of<HomeProvider>(context, listen: false).loadHomeData(context);
                                       widget.provider?.getAttendanceMethod(context);
+
+                                      getCurrentTimeIn(); // time format
+                                      getTimeIn(); // date and time
+                                      setData(currentTimeIn);
+                                      getData();
+
+                                      setData2(timeIn!.toLocal());
+                                      getData2();
+
                                     } ,
                                     child: Text('Time-in')),
                                 SizedBox(
@@ -314,7 +438,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                               ),
                                             ],
                                           ))),
-                                  Icon(Icons.arrow_forward_ios_outlined),
+                                  Icon(Icons.arrow_forward_ios_outlined, color: Colors.black),
 
                                 ],
                               ),
@@ -333,16 +457,20 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                       SizedBox(width: 20),
                       Align(
                           alignment: Alignment.centerLeft,
-                          child: ElevatedButton(onPressed: (){
-                            // setState(() {
-                            //   tdata = currentTime;
-                            // });
+                          child: ElevatedButton(onPressed:
+                          widget.provider?.checkStatus == "Check In" ? null : (){
+                            getCurrentTimeOut();
+                            getTimeOut();
+                            calculateTimeDifference2();
+                            setState(() { });
                           }, child: Text('Check Rendered Time?'))),
                       SizedBox(width: 20,),
-                      Text(tdata == null ? 'Loading...' : tdata)
+                      Text(differenceInMinutes == null ? 'Loading...' : getTimeString(differenceInMinutes), style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(width: 5 ,),
+                      Text('minutes', style: TextStyle(fontWeight: FontWeight.bold),)
                     ],
-                  )
-
+                  ),
+                  Text('Time-in : $saveTimeIn')
                 ],
               ),
             ),
