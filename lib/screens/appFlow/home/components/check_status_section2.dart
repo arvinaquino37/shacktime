@@ -438,13 +438,11 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                               ),
                                             ],
                                           ))),
-                                  Icon(Icons.arrow_forward_ios_outlined, color: Colors.black),
-
+                                  Icon(Icons.arrow_forward_ios_outlined, color: Colors.grey),
                                 ],
                               ),
                             ],
                           )),
-
                     ],
                   ),
                   Container(
@@ -463,7 +461,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                             getTimeOut();
                             calculateTimeDifference2();
                             setState(() { });
-                          }, child: Text('Check Rendered Time?'))),
+                          }, child: Text('See Rendered Time?'))),
                       SizedBox(width: 20,),
                       Text(differenceInMinutes == null ? 'Loading...' : getTimeString(differenceInMinutes), style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(width: 5 ,),

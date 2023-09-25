@@ -34,6 +34,11 @@ class Attendance extends StatefulWidget {
 class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
   late AnimationController controller;
 
+  List<String> branchName = ['MC_Malabon_City', 'Fisher_Mall_Malabon', 'Puregold_Navotas', 'Sampaguita_Navotas'];
+  List<String> operatingHours = ['9:30-8:00', '9:30-9:00', '9:30-10:00', '8:30-9:00', '9:30-9:30'];
+  String? selectedBranchName;
+  String? selectedOperatingHours;
+
   @override
   void initState() {
     controller = AnimationController(
@@ -226,6 +231,102 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                       borderRadius: BorderRadius.circular(
                                           0), // radius of 10// green as background color
                                     )),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Row(
+                                  children: [
+                                    Text('Branch Name: '),
+                                    DropdownButton<String>(
+                                      value: selectedBranchName,
+                                      hint: Text('Select Branch Name') ,
+                                      items: branchName.map((e) {
+                                      return DropdownMenuItem(child: Text(e), value: e,);
+                                    }).toList(),
+                                      onChanged: (value) {
+                                      setState(() {
+                                        selectedBranchName = value;
+                                      });
+                                    },)
+                                    /*Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(color: Colors.green,width: 3)
+                                        ),
+                                        padding: EdgeInsets.only(left: 16, right: 16),
+                                        child: DropdownButton<String>(
+                                          icon: Icon(Icons.arrow_drop_down),
+                                          iconSize: 30.0,
+                                          isExpanded: true,
+                                          underline: SizedBox(),
+                                          hint: Text('Select Item:'),
+                                          value: selectedItem,
+                                          items: items.map((e) {
+                                            return DropdownMenuItem(
+                                                value: e,
+                                                child: Text(e)
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedItem = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),*/
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Row(
+                                  children: [
+                                    Text('Operating Hours: '),
+                                    DropdownButton<String>(
+                                      value: selectedOperatingHours,
+                                      hint: Text('Select Operating Hours') ,
+                                      items: operatingHours.map((e) {
+                                        return DropdownMenuItem(child: Text(e), value: e,);
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedOperatingHours = value;
+                                        });
+                                      },)
+                                    /*Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(color: Colors.green,width: 3)
+                                        ),
+                                        padding: EdgeInsets.only(left: 16, right: 16),
+                                        child: DropdownButton<String>(
+                                          icon: Icon(Icons.arrow_drop_down),
+                                          iconSize: 30.0,
+                                          isExpanded: true,
+                                          underline: SizedBox(),
+                                          hint: Text('Select Item:'),
+                                          value: selectedItem,
+                                          items: items.map((e) {
+                                            return DropdownMenuItem(
+                                                value: e,
+                                                child: Text(e)
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedItem = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),*/
+                                  ],
+                                ),
                               ),
                               const SizedBox(
                                 height: 20,
