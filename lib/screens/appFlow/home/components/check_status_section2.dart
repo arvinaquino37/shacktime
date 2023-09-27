@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrm_app/screens/appFlow/home/attendeance/attendance_provider.dart';
 import 'package:hrm_app/screens/appFlow/home/home_provider.dart';
 import 'package:hrm_app/utils/res.dart';
 import 'package:intl/intl.dart';
@@ -10,9 +11,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CheckStatusSection2 extends StatefulWidget {
-  const CheckStatusSection2({super.key, this.provider});
+  const CheckStatusSection2({super.key, this.provider, this.attendanceProvider});
 
   final HomeProvider? provider;
+  final AttendanceProvider? attendanceProvider;
 
   @override
   State<CheckStatusSection2> createState() => _CheckStatusSection2State();
@@ -468,7 +470,8 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                       Text('minutes', style: TextStyle(fontWeight: FontWeight.bold),)
                     ],
                   ),
-                  Text('Time-in : $saveTimeIn')
+                  Text('Time-in : $saveTimeIn'),
+                  Text( '${widget.attendanceProvider?.inTime}')
                 ],
               ),
             ),
