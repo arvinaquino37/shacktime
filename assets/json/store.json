@@ -1,0 +1,104 @@
+{
+  "location": [
+    {
+      "north_luzon" : [
+        {
+        "id": 1,
+        "store_location": "SM MEGACENTER CABANATUAN",
+        "store_time": "9:30AM - 9:30PM"
+        },
+        {
+          "id": 2,
+          "store_location": "SM CABANATUAN",
+          "store_time": "9:30AM - 9:30PM"
+        },
+        {
+          "id": 3,
+          "store_location": "N.E. PACIFIC MALL",
+          "store_time": "9:30AM - 8:30PM"
+        }
+      ],
+      "ncr" : [
+        {
+          "id": 1,
+          "store_location": "MC Malabon City",
+          "store_time": "9:30AM - 8:00PM"
+        },
+        {
+          "id": 2,
+          "store_location": "Fisher Mall Malabon (Sun-Thurs)",
+          "store_time": "9:30AM - 9:00PM"
+        },
+        {
+          "id": 3,
+          "store_location": "Fisher Mall Malabon (Fri-Sat)",
+          "store_time": "9:30AM - 10:00PM"
+        },
+        {
+          "id": 4,
+          "store_location": "Puregold Navotas",
+          "store_time": "8:30AM - 9:00PM"
+        },
+        {
+          "id": 5,
+          "store_location": "Sampaguita Navotas",
+          "store_time": "9:30AM - 9:30PM"
+        },
+        {
+          "id": 6,
+          "store_location": "SM Valenzuela",
+          "store_time": "9:30AM - 9:30PM"
+        }
+      ],
+      "south_luzon" : [
+        {
+          "id": 1,
+          "store_location": "BIÑAN POBLACION",
+          "store_time": "9:30AM - 9:30PM"
+        },
+        {
+          "id": 2,
+          "store_location": "PUREGOLD TAGAPO",
+          "store_time": "9:30AM - 9:00PM"
+        },
+        {
+          "id": 3,
+          "store_location": "SOUTHVILLE",
+          "store_time": "9:30AM - 9:30PM"
+        }
+      ]
+    }
+  ],
+  "store": [
+    {
+      "id": 1,
+      "store_location": "MC Malabon City",
+      "store_time": "9:30AM - 8:00PM"
+    },
+    {
+      "id": 2,
+      "store_location": "Fisher Mall Malabon (Sun-Thurs)",
+      "store_time": "9:30AM - 9:00PM"
+    },
+    {
+      "id": 3,
+      "store_location": "Fisher Mall Malabon (Fri-Sat)",
+      "store_time": "9:30AM - 10:00PM"
+    },
+    {
+      "id": 4,
+      "store_location": "Puregold Navotas",
+      "store_time": "8:30AM - 9:00PM"
+    },
+    {
+      "id": 5,
+      "store_location": "Sampaguita Navotas",
+      "store_time": "9:30AM - 9:30PM"
+    },
+    {
+      "id": 6,
+      "store_location": "SM Valenzuela",
+      "store_time": "9:30AM - 9:30PM"
+    }
+  ]
+}

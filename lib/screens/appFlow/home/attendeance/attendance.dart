@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_app/api_service/connectivity/no_internet_screen.dart';
@@ -34,10 +36,40 @@ class Attendance extends StatefulWidget {
 class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
   late AnimationController controller;
 
-  List<String> branchName = ['MC_Malabon_City', 'Fisher_Mall_Malabon', 'Puregold_Navotas', 'Sampaguita_Navotas'];
+  List<String> branchName = ['MC Malabon City', 'Fisher Mall Malabon (Sun-Thurs)', 'Fisher Mall Malabon (Fri-Sat)', 'Puregold Navotas', 'Sampaguita Navotas'];
   List<String> operatingHours = ['9:30-8:00', '9:30-9:00', '9:30-10:00', '8:30-9:00', '9:30-9:30'];
   String? selectedBranchName;
   String? selectedOperatingHours;
+
+  List jsonData = [];
+  String? valueChoose;
+  String? storeHours;
+
+  bool isLocation = false;
+
+  Future<void> loadJsonData() async {
+    //   final String jsonString = await DefaultAssetBundle.of(context)
+    //       .loadString('assets/json/store.json'); // Change the path as per your JSON file location
+    //   final List<dynamic> data = json.decode(jsonString);
+    //   setState(() {
+    //     jsonData = data.cast<Map<String, dynamic>>();
+    //   });
+    // }
+
+    // Load the JSON file from assets
+    final String jsonString = await rootBundle.loadString('assets/json/store.json');
+    // Parse the JSON string into a List
+    // final List<Map<String, dynamic>> data = json.decode(jsonString);
+    // List<Map<String, dynamic>> jsonData = [];
+    final data = await json.decode(jsonString);
+    // Map jsonStore = jsonDecode(jsonString);
+
+    setState(() {
+      jsonData = data["store"];
+    });
+
+    // return jsonStore;
+  }
 
   @override
   void initState() {
@@ -46,6 +78,7 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
         duration: const Duration(seconds: 3),
         animationBehavior: AnimationBehavior.preserve);
     super.initState();
+    loadJsonData();
   }
 
   @override
@@ -187,6 +220,10 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                           await context
                                               .read<AttendanceProvider>()
                                               .updatePosition();
+                                              setState(() {
+                                                provider.youLocationServer == 'Loading...';
+                                              });
+                                              
                                         },
                                         child: Row(
                                           children: [
@@ -233,103 +270,54 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                     )),
                               ),
                               Visibility(
-                                visible: provider.checkStatus == "Check In",
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Row(
-                                    children: [
-                                      Text('Branch Name: '),
-                                      DropdownButton<String>(
-                                        value: selectedBranchName,
-                                        hint: Text('Select Branch Name') ,
-                                        items: branchName.map((e) {
-                                        return DropdownMenuItem(child: Text(e), value: e,);
-                                      }).toList(),
-                                        onChanged: (value) {
-                                        setState(() {
-                                          selectedBranchName = value;
-                                        });
-                                      },)
-                                      /*Padding(
-                                        padding: const EdgeInsets.all(24.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              border: Border.all(color: Colors.green,width: 3)
-                                          ),
-                                          padding: EdgeInsets.only(left: 16, right: 16),
-                                          child: DropdownButton<String>(
-                                            icon: Icon(Icons.arrow_drop_down),
-                                            iconSize: 30.0,
-                                            isExpanded: true,
-                                            underline: SizedBox(),
-                                            hint: Text('Select Item:'),
-                                            value: selectedItem,
-                                            items: items.map((e) {
-                                              return DropdownMenuItem(
-                                                  value: e,
-                                                  child: Text(e)
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                selectedItem = value;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),*/
-                                    ],
+                                visible: provider.checkStatus == 'Check In' ? true : false,
+                                child: Container(
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    // border: Border.all(color: Colors.green)
                                   ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: provider.checkStatus == "Check In",
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Row(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Operating Hours: '),
-                                      DropdownButton<String>(
-                                        value: selectedOperatingHours,
-                                        hint: Text('Select Operating Hours') ,
-                                        items: operatingHours.map((e) {
-                                          return DropdownMenuItem(child: Text(e), value: e,);
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedOperatingHours = value;
-                                          });
-                                        },)
-                                      /*Padding(
-                                        padding: const EdgeInsets.all(24.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              border: Border.all(color: Colors.green,width: 3)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('Store Location: '),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: Colors.grey)
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                                              child: DropdownButton<String>(
+                                                underline: SizedBox(),
+                                                isDense: false,
+                                                hint: Text('Select Branch:'),
+                                                value: valueChoose,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    valueChoose = value;
+                                                    // Find the selected object's description
+                                                    for (var obj in jsonData) {
+                                                      if (obj['store_location'] == value) {
+                                                        storeHours = obj['store_time'];
+                                                        break;
+                                                        }
+                                                      }
+                                                   });
+                                                        },
+                                                        items: jsonData.map((valueItem){
+                                                          return DropdownMenuItem<String>(
+                                                            child: Text(valueItem['store_location'],style: TextStyle(fontSize: 14)),
+                                                            value: valueItem['store_location'],);
+                                                        }).toList(),
+                                              ),
+                                            ),
                                           ),
-                                          padding: EdgeInsets.only(left: 16, right: 16),
-                                          child: DropdownButton<String>(
-                                            icon: Icon(Icons.arrow_drop_down),
-                                            iconSize: 30.0,
-                                            isExpanded: true,
-                                            underline: SizedBox(),
-                                            hint: Text('Select Item:'),
-                                            value: selectedItem,
-                                            items: items.map((e) {
-                                              return DropdownMenuItem(
-                                                  value: e,
-                                                  child: Text(e)
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                selectedItem = value;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),*/
+                                        ],
+                                      ),
+                                      Text('Operating Hours: ${storeHours == null ? 'Please Select Store Location' : storeHours}'),
                                     ],
                                   ),
                                 ),
@@ -479,156 +467,153 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      Visibility(
-                        visible: provider.isCheckIn ?? true,
-                        child: Center(
-                          child: GestureDetector(
-                            onVerticalDragCancel: () {
-                              controller.reset();
-                            },
-                            onHorizontalDragCancel: () {
-                              controller.reset();
-                            },
-                            onTapDown: (_) {
-                              controller.forward();
-                            },
-                            onTapUp: (_) {
-                              if (controller.status ==
-                                  AnimationStatus.forward) {
-                                controller.reverse();
-                                controller.value;
-                              }
-                            },
-                            child: provider.checkIn != null
-                                ? Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                const SizedBox(
-                                  height: 175,
-                                  width: 175,
-                                  child: CircularProgressIndicator(
-                                    // strokeWidth: 5,
-                                    value: 1.0,
-                                    valueColor:
-                                    AlwaysStoppedAnimation<Color>(
-                                        Colors.white),
-                                  ),
+                      Center(
+                        child: provider.youLocationServer == 'Loading...' ? CircularProgressIndicator() : GestureDetector(
+                          onVerticalDragCancel: () {
+                            controller.reset();
+                          },
+                          onHorizontalDragCancel: () {
+                            controller.reset();
+                          },
+                          onTapDown: (_) {
+                            controller.forward();
+                          },
+                          onTapUp: (_) {
+                            if (controller.status ==
+                                AnimationStatus.forward) {
+                              controller.reverse();
+                              controller.value;
+                            }
+                          },
+                          child: provider.checkIn != null
+                              ? Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 175,
+                                width: 175,
+                                child: CircularProgressIndicator(
+                                  // strokeWidth: 5,
+                                  value: 1.0,
+                                  valueColor:
+                                  AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
-                                Container(
-                                  height: 185,
-                                  width: 185,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      const BorderRadius.all(
-                                        Radius.circular(100.0),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: AppColors.colorPrimary
-                                              .withOpacity(0.1),
-                                          spreadRadius: 3,
-                                          blurRadius: 3,
-                                          offset: const Offset(0, 3),
-                                        )
-                                      ]),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 5,
-                                    value: controller.value,
-                                    valueColor: AlwaysStoppedAnimation<
-                                        Color>(
-                                        provider.checkStatus == "Check In"
-                                            ? AppColors.colorPrimary
-                                            : const Color(0xFFD83675)),
-                                  ),
+                              ),
+                              Container(
+                                height: 185,
+                                width: 185,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    const BorderRadius.all(
+                                      Radius.circular(100.0),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.colorPrimary
+                                            .withOpacity(0.1),
+                                        spreadRadius: 3,
+                                        blurRadius: 3,
+                                        offset: const Offset(0, 3),
+                                      )
+                                    ]),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 5,
+                                  value: controller.value,
+                                  valueColor: AlwaysStoppedAnimation<
+                                      Color>(
+                                      provider.checkStatus == "Check In"
+                                          ? AppColors.colorPrimary
+                                          : const Color(0xFFD83675)),
                                 ),
-                                ClipOval(
-                                  child: Material(
-                                      child: Container(
-                                        height: 170,
-                                        width: 170,
-                                        decoration: provider.checkStatus ==
-                                            "Check Out"
-                                            ? const BoxDecoration(
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                //     ? const Color(0xFF4D4AB6)
-                                                // : const Color(0xFFD83675)),
-                                                Color(0xFFE8356C),
-                                                AppColors.colorPrimary,
-                                              ],
-                                              begin: FractionalOffset(
-                                                  1.0, 0.0),
-                                              end: FractionalOffset(
-                                                  0.0, 3.0),
-                                              stops: [0.0, 1.0],
-                                              tileMode: TileMode.clamp),
-                                        )
-                                            : const BoxDecoration(
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                AppColors.colorPrimary,
-                                                Color(0xFF00CCFF)
-                                              ],
-                                              begin: FractionalOffset(
-                                                  1.0, 0.0),
-                                              end: FractionalOffset(
-                                                  0.0, 3.0),
-                                              stops: [0.0, 1.0],
-                                              tileMode: TileMode.clamp),
-                                        ),
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets.only(
-                                                    left: 10.0),
-                                                child: Image.asset(
-                                                  "assets/images/tap_figer.png",
-                                                  height: 50,
-                                                  width: 50,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: Text(
-                                                  tr(provider.checkStatus ??
-                                                      "check In"),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                      FontWeight.w500),
-                                                ),
-                                              ),
+                              ),
+                              ClipOval(
+                                child: Material(
+                                    child: Container(
+                                      height: 170,
+                                      width: 170,
+                                      decoration: provider.checkStatus ==
+                                          "Check Out"
+                                          ? const BoxDecoration(
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              //     ? const Color(0xFF4D4AB6)
+                                              // : const Color(0xFFD83675)),
+                                              Color(0xFFE8356C),
+                                              AppColors.colorPrimary,
                                             ],
-                                          ),
+                                            begin: FractionalOffset(
+                                                1.0, 0.0),
+                                            end: FractionalOffset(
+                                                0.0, 3.0),
+                                            stops: [0.0, 1.0],
+                                            tileMode: TileMode.clamp),
+                                      )
+                                          : const BoxDecoration(
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              AppColors.colorPrimary,
+                                              Color(0xFF00CCFF)
+                                            ],
+                                            begin: FractionalOffset(
+                                                1.0, 0.0),
+                                            end: FractionalOffset(
+                                                0.0, 3.0),
+                                            stops: [0.0, 1.0],
+                                            tileMode: TileMode.clamp),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.only(
+                                                  left: 10.0),
+                                              child: Image.asset(
+                                                "assets/images/tap_figer.png",
+                                                height: 50,
+                                                width: 50,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.only(
+                                                  left: 5.0),
+                                              child: Text(
+                                                tr(provider.checkStatus ??
+                                                    "check In"),
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                    FontWeight.w500),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      )),
-                                )
-                              ],
-                            )
-                                : Shimmer.fromColors(
-                              baseColor: const Color(0xFFE8E8E8),
-                              highlightColor: Colors.white,
-                              child: Container(
-                                  height: 184,
-                                  width: 184,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE8E8E8),
-                                    borderRadius: BorderRadius.circular(
-                                        100), // radius of 10// green as background color
-                                  )),
-                            ),
+                                      ),
+                                    )),
+                              )
+                            ],
+                          )
+                              : Shimmer.fromColors(
+                            baseColor: const Color(0xFFE8E8E8),
+                            highlightColor: Colors.white,
+                            child: Container(
+                                height: 184,
+                                width: 184,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE8E8E8),
+                                  borderRadius: BorderRadius.circular(
+                                      100), // radius of 10// green as background color
+                                )),
                           ),
                         ),
                       ),

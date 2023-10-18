@@ -373,7 +373,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                     child: Text('Time-out'))
                               ],
                             ),
-                            Container(
+                            /* Container(
                                 width: 200,
                                 decoration: BoxDecoration(
                                     color: Colors.green,
@@ -394,7 +394,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                                     child: Text(
                                       'Store Hours: 11AM-11PM',
                                       style: TextStyle(color: Colors.white),
-                                    ))),
+                                    ))), */
                             // const SizedBox(height: 10),
                           ],
                         ),
@@ -471,7 +471,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                     ],
                   ),
                   Text('Time-in : $saveTimeIn'),
-                  Text( '${widget.attendanceProvider?.inTime}')
+                  // Text( '${widget.attendanceProvider?.inTime}')
                 ],
               ),
             ),
