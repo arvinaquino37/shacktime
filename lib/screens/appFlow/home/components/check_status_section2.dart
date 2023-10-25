@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrm_app/screens/appFlow/home/attendeance/attendance_provider.dart';
+import 'package:hrm_app/screens/appFlow/home/components/check_status_section.dart';
 import 'package:hrm_app/screens/appFlow/home/home_provider.dart';
 import 'package:hrm_app/utils/res.dart';
 import 'package:intl/intl.dart';
@@ -183,7 +184,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
       visible: widget.provider?.isCheckIn ?? false,
       child: Column(
         children: [
-          /*Card(
+          Card(
             elevation: 2,
             margin: const EdgeInsets.symmetric(horizontal: 16),
             shape: RoundedRectangleBorder(
@@ -241,11 +242,9 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                     ],
                   ),
                 )),
-          ),*/
-          SizedBox(
-            height: 10,
           ),
-          /*Card(
+          // SizedBox(height: 10),
+          /* Card(
                   elevation: 2,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(
@@ -256,7 +255,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                       children: [
                         Expanded(
                           child: Image.asset(
-                            provider?.checkStatus == "Check In"
+                            widget.provider?.checkStatus == "Check In"
                                 ? 'assets/home_icon/clock.png'
                                 : 'assets/home_icon/clock.png',
                             height: 40,
@@ -273,7 +272,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                             children: [
                               Text('Location: QC - Tandang Sora'),
                               Text(
-                                  provider?.checkStatus == "Check In"
+                                  widget.provider?.checkStatus == "Check In"
                                       ? "Rendered Time"
                                       : "Rendered Time",
                                   style: const TextStyle(
@@ -289,11 +288,9 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                       ],
                     ),
                   ),
-                ),*/
-          SizedBox(
-            height: 10,
-          ),
-          Card(
+                ), */
+          // SizedBox(height: 10),
+          /* Card(
             elevation: 2,
             margin: const EdgeInsets.symmetric(horizontal: 16),
             shape: RoundedRectangleBorder(
@@ -475,7 +472,7 @@ class _CheckStatusSection2State extends State<CheckStatusSection2> {
                 ],
               ),
             ),
-          ),
+          ), */
         ],
       ),
     )

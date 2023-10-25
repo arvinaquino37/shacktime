@@ -269,7 +269,7 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                           0), // radius of 10// green as background color
                                     )),
                               ),
-                              Visibility(
+                              /* Visibility(
                                 visible: provider.checkStatus == 'Check In' ? true : false,
                                 child: Container(
                                   height: 100,
@@ -321,10 +321,8 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                     ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              ), */
+                              const SizedBox(height: 20),
                               provider.checkIn != null
                                   ? Text(tr("choose_your_remote_mode"),
                                   style: GoogleFonts.nunitoSans(
