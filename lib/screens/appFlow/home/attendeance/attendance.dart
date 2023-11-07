@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:http/http.dart' as http;
 
 class Attendance extends StatefulWidget {
   final bool? navigationMenu;
@@ -58,14 +59,17 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
 
     // Load the JSON file from assets
     final String jsonString = await rootBundle.loadString('assets/json/store.json');
+    // final jsonString = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
     // Parse the JSON string into a List
     // final List<Map<String, dynamic>> data = json.decode(jsonString);
     // List<Map<String, dynamic>> jsonData = [];
     final data = await json.decode(jsonString);
+    // final data = await json.decode(jsonString.body);
     // Map jsonStore = jsonDecode(jsonString);
 
     setState(() {
       jsonData = data["store"];
+      // jsonData = data;
     });
 
     // return jsonStore;
@@ -311,6 +315,8 @@ class _AttendanceState extends State<Attendance> with TickerProviderStateMixin {
                                                           return DropdownMenuItem<String>(
                                                             child: Text(valueItem['store_location'],style: TextStyle(fontSize: 14)),
                                                             value: valueItem['store_location'],);
+                                                          // child: Text(valueItem['title'],style: TextStyle(fontSize: 14)),
+                                                          // value: valueItem['title'],);
                                                         }).toList(),
                                               ),
                                             ),
